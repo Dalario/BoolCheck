@@ -12,6 +12,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import br.com.dalario.desafio1.screens.introducacaoScreen
+import br.com.dalario.desafio1.screens.matrizScreen
 import br.com.dalario.desafio1.screens.verificacaoScreen
 import br.com.dalario.desafio1.ui.theme.Desafio1Theme
 
@@ -28,6 +29,7 @@ class MainActivity : ComponentActivity() {
                     NavHost(navController= navController, startDestination = "boasVindas"){
                         composable (route = "boasVindas") { introducacaoScreen(navController) }
                         composable (route = "verificacao") { verificacaoScreen(navController) }
+                        composable (route = "matriz") { matrizScreen(navController) }
                     }
                 }
             }

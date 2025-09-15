@@ -1,8 +1,6 @@
 package br.com.dalario.desafio1.calculos
 
 import android.util.Log
-import androidx.collection.emptyLongSet
-import androidx.compose.material3.rememberTimePickerState
 
 fun verificacao(expressao: String): Boolean{
     var tam = expressao.length

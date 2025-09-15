@@ -39,6 +39,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import br.com.dalario.desafio1.calculos.criamatriz
 import br.com.dalario.desafio1.calculos.verificacao
 import java.nio.file.WatchEvent
 
@@ -46,7 +47,7 @@ import java.nio.file.WatchEvent
 @Composable
 fun verificacaoScreen(navController: NavController) {
     var expressao = remember {
-        mutableStateOf("")
+        mutableStateOf("P∧¬Q∨R∧S")
     }
     var estadoverificacao = remember {
         mutableStateOf(value = "")
@@ -54,9 +55,12 @@ fun verificacaoScreen(navController: NavController) {
     var cordoestado = remember {
         mutableStateOf(value = Color.LightGray)
     }
+    var matriz = remember {
+        mutableStateOf(value = mutableListOf<Char>())
+    }
 
-    Column (modifier= Modifier.fillMaxSize()){
-        Spacer(modifier = Modifier.padding(top =30.dp))
+    Column (modifier= Modifier.fillMaxSize()) {
+        Spacer(modifier = Modifier.padding(top = 30.dp))
         IconButton(
             onClick = {
                 navController.navigate("boasVindas")
@@ -73,10 +77,10 @@ fun verificacaoScreen(navController: NavController) {
                     shape = RoundedCornerShape(20.dp)
                 )
                     .background(
-                    color = Color(0xFF60B1C5),
-                    shape = RoundedCornerShape(20.dp),
+                        color = Color(0xFF60B1C5),
+                        shape = RoundedCornerShape(20.dp),
 
-                ).size(90.dp, 30.dp)
+                        ).size(90.dp, 30.dp)
             ) {
                 Icon(
                     imageVector = Icons.Default.KeyboardArrowLeft,
@@ -91,28 +95,30 @@ fun verificacaoScreen(navController: NavController) {
             }
         }
         Spacer(modifier = Modifier.padding(top = 10.dp))
-        Column(modifier = Modifier
-            .height(230.dp)
-            .fillMaxWidth()
-            .background(
-                color = Color(0xFF60B1C5),
-                shape = RoundedCornerShape(10.dp),
-            )
-            .border(
-                3.dp,
-                color = Color.Black,
-                shape = RoundedCornerShape(8.dp)
-            ),
+        Column(
+            modifier = Modifier
+                .height(230.dp)
+                .fillMaxWidth()
+                .background(
+                    color = Color(0xFF60B1C5),
+                    shape = RoundedCornerShape(10.dp),
+                )
+                .border(
+                    3.dp,
+                    color = Color.Black,
+                    shape = RoundedCornerShape(8.dp)
+                ),
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Spacer(modifier = Modifier.padding(top= 10.dp))
+            Spacer(modifier = Modifier.padding(top = 10.dp))
             Text(
-                "Obs: Por conveção, usar apenas letras maiúsculas (A,B,C...,Z)",
+                "Por conveção, usar apenas letras maiúsculas (A,B,C...,Z) e adicionar os conectivos por meio dos botões abaixo",
                 fontSize = 20.sp,
                 color = Color.Black,
                 fontWeight = FontWeight.Bold,
-                modifier = Modifier.padding(horizontal = 10.dp)
+                modifier = Modifier.padding(horizontal = 10.dp),
+                textAlign = TextAlign.Justify
             )
             Spacer(modifier = Modifier.padding(top = 10.dp))
             OutlinedTextField(
@@ -136,7 +142,7 @@ fun verificacaoScreen(navController: NavController) {
                     unfocusedLabelColor = Color.LightGray,
                     focusedTextColor = Color.White,
                     focusedPlaceholderColor = Color.Transparent
-                    ),
+                ),
                 maxLines = 4
             )
         }
@@ -149,7 +155,7 @@ fun verificacaoScreen(navController: NavController) {
         ) {
             Button(
                 onClick = {
-                   expressao.value =expressao.value + "¬"
+                    expressao.value = expressao.value + "¬"
                 },
                 border = BorderStroke(1.dp, color = Color(0xFF121212)),
                 elevation = ButtonDefaults.buttonElevation(20.dp),
@@ -165,7 +171,7 @@ fun verificacaoScreen(navController: NavController) {
 
             Button(
                 onClick = {
-                    expressao.value =expressao.value + "∧"
+                    expressao.value = expressao.value + "∧"
                 },
                 border = BorderStroke(1.dp, color = Color(0xFF121212)),
                 elevation = ButtonDefaults.buttonElevation(20.dp),
@@ -181,50 +187,59 @@ fun verificacaoScreen(navController: NavController) {
 
             Button(
                 onClick = {
-                    expressao.value =expressao.value + "∨"
+                    expressao.value = expressao.value + "∨"
                 },
                 border = BorderStroke(1.dp, color = Color(0xFF121212)),
                 elevation = ButtonDefaults.buttonElevation(20.dp),
                 modifier = Modifier.size(width = 100.dp, height = 50.dp),
                 colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF60B1C5))
             ) {
-                Text("∨",
+                Text(
+                    "∨",
                     fontSize = 20.sp,
-                    fontWeight = FontWeight.Bold)
+                    fontWeight = FontWeight.Bold
+                )
             }
 
         }
         Spacer(modifier = Modifier.padding(top = 13.dp))
-        Row(horizontalArrangement = Arrangement.SpaceEvenly,
+        Row(
+            horizontalArrangement = Arrangement.SpaceEvenly,
             modifier = Modifier.fillMaxWidth()
         ) {
-            Button(onClick = {
-                expressao.value =expressao.value + "→"
-            },
+            Button(
+                onClick = {
+                    expressao.value = expressao.value + "→"
+                },
                 border = BorderStroke(1.dp, color = Color(0xFF121212)),
                 elevation = ButtonDefaults.buttonElevation(20.dp),
                 modifier = Modifier.size(width = 100.dp, height = 50.dp),
                 colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF60B1C5))
-                ) {
-                Text("→",
+            ) {
+                Text(
+                    "→",
                     fontSize = 20.sp,
-                    fontWeight = FontWeight.Bold)
+                    fontWeight = FontWeight.Bold
+                )
             }
 
-            Button(onClick = {
-                expressao.value =expressao.value + "↔"
-            },
+            Button(
+                onClick = {
+                    expressao.value = expressao.value + "↔"
+                },
                 border = BorderStroke(1.dp, color = Color(0xFF121212)),
                 elevation = ButtonDefaults.buttonElevation(20.dp),
                 modifier = Modifier.size(width = 100.dp, height = 50.dp),
                 colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF60B1C5))
-                ) {
-                Text("↔",
+            ) {
+                Text(
+                    "↔",
                     fontSize = 20.sp,
-                    fontWeight = FontWeight.Bold)
+                    fontWeight = FontWeight.Bold
+                )
             }
         }
-        Spacer(modifier = Modifier.padding(top= 20.dp))
+        Spacer(modifier = Modifier.padding(top = 10.dp))
         Row(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.Center
@@ -237,22 +252,22 @@ fun verificacaoScreen(navController: NavController) {
                 onClick = {
                     var estadoverificacao1 = verificacao(expressao.value)
 
-                    if (estadoverificacao1){
+                    if (estadoverificacao1) {
                         estadoverificacao.value = "verdadeiro"
                         cordoestado.value = Color(0xFF60E597)
-                    }
-                    else{
+                    } else {
                         estadoverificacao.value = "falso"
-                        cordoestado.value =Color(0xFFF88585)
+                        cordoestado.value = Color(0xFFF88585)
                     }
                 }
             ) {
                 Text("VERIFICAR EXPRESSÃO", fontSize = 20.sp, fontWeight = FontWeight.Bold)
             }
         }
-        Spacer(modifier = Modifier.padding(top = 20.dp))
-        Card (modifier = Modifier.size(310.dp, 200.dp)
-            .padding(start = 60.dp),
+        Spacer(modifier = Modifier.padding(top = 10.dp))
+        Card(
+            modifier = Modifier.size(310.dp, 110.dp)
+                .padding(start = 60.dp),
             elevation = CardDefaults.cardElevation(20.dp),
             shape = RoundedCornerShape(10.dp),
             colors = CardDefaults.cardColors(containerColor = cordoestado.value),
@@ -260,29 +275,49 @@ fun verificacaoScreen(navController: NavController) {
         ) {
             if (estadoverificacao.value == "verdadeiro") {
                 Text(
-                    "\nSintaxe\n\n\ncorreta",
+                    "Sintaxe\n\ncorreta",
                     textAlign = TextAlign.Center,
                     modifier = Modifier.fillMaxSize(),
-                    fontSize = 70.sp
+                    fontSize = 50.sp
                 )
             }
             if (estadoverificacao.value == "falso") {
                 Text(
-                    "\nSintaxe\n\n\nincorreta",
+                    "Sintaxe\n\nincorreta",
                     textAlign = TextAlign.Center,
                     modifier = Modifier.fillMaxSize(),
-                    fontSize = 60.sp
+                    fontSize = 50.sp
                 )
-            }
-            else{
+            } else {
                 Text(
-                    "\n?",
+                    "?",
                     textAlign = TextAlign.Center,
                     modifier = Modifier.fillMaxSize(),
-                    fontSize = 120.sp
+                    fontSize = 95.sp
                 )
             }
         }
+        Spacer(modifier= Modifier.padding(top = 10.dp))
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.Center
+        ){
+        Button(
+            border = BorderStroke(3.dp, color = Color(0xFF121212)),
+            elevation = ButtonDefaults.buttonElevation(20.dp),
+            modifier = Modifier.size(350.dp, 60.dp),
+            colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF60B1C5)),
+            onClick = {
+                if(estadoverificacao.value == "verdadeiro"){
+                    matriz.value = criamatriz(expressao.value)
+                    navController.currentBackStackEntry?.savedStateHandle?.set("listaChars",matriz.value)
+                    navController.navigate("matriz")
+                }
+            }
+        ) {
+            Text("VER TABELA VERDADE", fontSize = 20.sp, fontWeight = FontWeight.Bold)
+        }
+    }
     }
 }
 
